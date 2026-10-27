@@ -9,3 +9,5 @@ venv/
 zetaris-platform/
 submission/
 .codex-finalizer/
+
+.vercel
