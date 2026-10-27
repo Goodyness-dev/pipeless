@@ -76,6 +76,9 @@ class Config:
     def load() -> "Config":
         ua = _env("ZETARIS_USER_AGENT", "", False) or ""
         ua_valid = valid_user_agent(ua)
+        is_vercel = bool(os.getenv("VERCEL"))
+        default_log = "/tmp/logs" if is_vercel else "logs"
+        default_data = "/tmp/data" if is_vercel else "data"
         cfg = Config(
             zetaris_rest_url=_env("ZETARIS_REST_URL", "http://localhost:8888/api/v1.0") or "http://localhost:8888/api/v1.0",
             zetaris_org_id=_env("ZETARIS_ORG_ID", "1") or "1",
@@ -97,11 +100,14 @@ class Config:
             max_revisions=int(_env("MAX_REVISIONS", "2") or "2"),
             max_llm_calls_per_run=int(_env("MAX_LLM_CALLS_PER_RUN", "40") or "40"),
             sample_mode=(_env("SAMPLE_MODE", "false") or "false").lower() == "true",
-            log_dir=Path(_env("LOG_DIR", "logs") or "logs"),
-            data_dir=Path(_env("DATA_DIR", "data") or "data"),
+            log_dir=Path(_env("LOG_DIR", default_log) or default_log),
+            data_dir=Path(_env("DATA_DIR", default_data) or default_data),
         )
-        cfg.log_dir.mkdir(parents=True, exist_ok=True)
-        (cfg.data_dir / "memory").mkdir(parents=True, exist_ok=True)
+        try:
+            cfg.log_dir.mkdir(parents=True, exist_ok=True)
+            (cfg.data_dir / "memory").mkdir(parents=True, exist_ok=True)
+        except OSError:
+            pass
         return cfg
 
     def require_builder(self) -> str:
