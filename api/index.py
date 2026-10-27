@@ -8,22 +8,23 @@ if str(root_dir) not in sys.path:
 from fastapi import Request
 from app.api.main import app
 
-@app.get("/")
-def root():
+@app.get("/api/debug")
+def debug(request: Request):
     return {
-        "status": "online",
-        "service": "Pipeless",
-        "docs_url": "/docs",
-        "health_url": "/health"
+        "scope_path": request.scope.get("path"),
+        "headers": dict(request.headers),
     }
 
 @app.middleware("http")
 async def vercel_path_rewrite(request: Request, call_next):
-    # When Vercel rewrites to /api/index.py, the request path can include /api or /api/index.py
-    path = request.scope.get("path", "")
-    for prefix in ["/api/index.py", "/api/index"]:
-        if path.startswith(prefix):
-            new_path = path[len(prefix):] or "/"
-            request.scope["path"] = new_path
-            break
+    # Check x-matched-path or x-forwarded-uri if available
+    matched = request.headers.get("x-matched-path")
+    if matched and matched != request.scope.get("path"):
+        request.scope["path"] = matched
+    else:
+        path = request.scope.get("path", "")
+        for prefix in ["/api/index.py", "/api/index"]:
+            if path.startswith(prefix):
+                request.scope["path"] = path[len(prefix):] or "/"
+                break
     return await call_next(request)
