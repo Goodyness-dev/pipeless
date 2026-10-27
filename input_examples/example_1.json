@@ -1,0 +1,14 @@
+{
+  "request_id": "example-001",
+  "user_query": "Which companies have an industry description in EDGAR that disagrees with the official SIC reference list?",
+  "sources": [
+    {
+      "id": "sic_edgar",
+      "kind": "catalog",
+      "recipe_id": "sic_edgar_usl"
+    }
+  ],
+  "context": {
+    "track": "The Agent That Can Explain Why"
+  }
+}

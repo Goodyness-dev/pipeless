@@ -1,0 +1,11 @@
+.env
+.venv
+venv
+data/
+logs/
+__pycache__
+*.pyc
+.git
+.pytest_cache
+zetaris-platform/
+submission/

@@ -1,0 +1,14 @@
+{
+  "request_id": "example-003",
+  "user_query": "Reconcile corporate identifiers and summarize missing matches.",
+  "sources": [
+    {
+      "id": "sic_edgar",
+      "kind": "catalog",
+      "recipe_id": "sic_edgar_usl"
+    }
+  ],
+  "context": {
+    "track": "Deterministic Join Verification"
+  }
+}

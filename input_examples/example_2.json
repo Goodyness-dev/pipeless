@@ -1,0 +1,16 @@
+{
+  "request_id": "example-002",
+  "user_query": "List all items and their categories from the public inventory REST API.",
+  "sources": [
+    {
+      "id": "public_inventory",
+      "kind": "rest_url",
+      "url": "https://api.restful-api.dev/objects",
+      "description": "Public technology devices catalog",
+      "count_path": ""
+    }
+  ],
+  "context": {
+    "track": "Novel REST Onboarding"
+  }
+}
